@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,19 +14,18 @@ import java.util.Optional;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
+    private AuthService authService;
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
-        return userRepository.save(user);
+        return authService.register(user);
     }
 
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody User user) {
-        Optional<User> foundUser = userRepository.findByEmail(user.getEmail());
-
-        if (foundUser.isPresent() && foundUser.get().getPassword().equals(user.getPassword())) {
-            return Map.of("message", "Login Success", "user", foundUser.get());
+        Optional<User> found = authService.login(user.getEmail(), user.getPassword());
+        if (found.isPresent()) {
+            return Map.of("message", "Login Success", "user", found.get());
         }
         return Map.of("message", "Login Failed");
     }
