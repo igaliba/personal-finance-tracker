@@ -15,7 +15,7 @@ public class Transaction {
     @ManyToOne
     private Category category;
 
-    // Getters et Setters (Ce qui remplace Lombok)
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getDescription() { return description; }
