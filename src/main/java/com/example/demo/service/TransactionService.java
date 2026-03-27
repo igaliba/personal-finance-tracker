@@ -27,6 +27,9 @@ public class TransactionService {
         return transactionRepository.save(t);
     }
 
+    public List<Transaction> getAllByUser(Long userId) {
+        return transactionRepository.findByUserId(userId);
+    }
 
     public Map<String, Double> getAmountsByCategory() {
         return transactionRepository.findAll().stream()
@@ -39,13 +42,23 @@ public class TransactionService {
 
     public Map<String, Object> getTransactionSummary() {
         List<Transaction> transactions = transactionRepository.findAll();
-        double income = transactions.stream().filter(t -> "INCOME".equals(t.getType())).mapToDouble(Transaction::getAmount).sum();
-        double expense = transactions.stream().filter(t -> "EXPENSE".equals(t.getType())).mapToDouble(Transaction::getAmount).sum();
+
+        double totalIncome = transactions.stream()
+                .filter(t -> t.getType().equals("INCOME"))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        double totalExpenses = transactions.stream()
+                .filter(t -> t.getType().equals("EXPENSE"))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
 
         Map<String, Object> summary = new HashMap<>();
-        summary.put("totalIncome", income);
-        summary.put("totalExpenses", expense);
-        summary.put("balance", income - expense);
+
+        summary.put("income", totalIncome);
+        summary.put("expense", totalExpenses);
+        summary.put("balance", totalIncome - totalExpenses);
+
         return summary;
     }
 }

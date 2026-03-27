@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.model.User;
 import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,11 +24,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         Optional<User> found = authService.login(user.getEmail(), user.getPassword());
+
         if (found.isPresent()) {
-            return Map.of("message", "Login Success", "user", found.get());
+            User u = found.get();
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login Success");
+            // On génère un faux token pour le localStorage
+            response.put("token", "fake-jwt-token-" + u.getId());
+            // On met les infos à la racine pour que Angular les trouve facilement
+            response.put("id", u.getId());
+            response.put("fullName", u.getFullName());
+
+            return ResponseEntity.ok(response);
         }
-        return Map.of("message", "Login Failed");
+
+        return ResponseEntity.status(401).body(Map.of("message", "Login Failed"));
     }
 }

@@ -22,6 +22,10 @@ public class TransactionController {
         return transactionService.getAll();
     }
 
+    @GetMapping("/user/{userId}")
+    public List<Transaction> getByUserId(@PathVariable Long userId) {
+        return transactionService.getAllByUser(userId);
+    }
 
     @GetMapping("/dashboard")
     public Map<String, Double> getDashboard() {
