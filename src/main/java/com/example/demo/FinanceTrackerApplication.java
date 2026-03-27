@@ -19,23 +19,24 @@ public class FinanceTrackerApplication {
 	}
 
 	@Bean
-	CommandLineRunner start(CategoryRepository catRepo, TransactionRepository transRepo) {
+	CommandLineRunner start(CategoryRepository categoryRepository) {
 		return args -> {
-			// Création de catégories de test
-			Category food = new Category(); food.setName("Alimentation");
-			Category rent = new Category(); rent.setName("Loyer");
-			catRepo.save(food);
-			catRepo.save(rent);
+			// ON VÉRIFIE SI LA LISTE EST VIDE AVANT D'AJOUTER
+			if (categoryRepository.count() == 0) {
+				Category cat1 = new Category();
+				cat1.setName("Alimentation");
+				categoryRepository.save(cat1);
 
-			Transaction t1 = new Transaction();
-			t1.setDescription("Courses Carrefour");
-			t1.setAmount(55.50);
-			t1.setDate(LocalDate.now());
-			t1.setType("EXPENSE");
-			t1.setCategory(food);
-			transRepo.save(t1);
+				Category cat2 = new Category();
+				cat2.setName("Loyer");
+				categoryRepository.save(cat2);
 
-			System.out.println("Données de test insérées !");
+				Category cat3 = new Category();
+				cat3.setName("Loisirs");
+				categoryRepository.save(cat3);
+			}else {
+				System.out.println("Les catégories existent déjà, on n'ajoute rien.");
+			}
 		};
 	}
 }

@@ -20,11 +20,14 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
+    public void deleteById(Long id) {
+        transactionRepository.deleteById(id);
+    }
     public Transaction save(Transaction t) {
         return transactionRepository.save(t);
     }
 
-    // Toute la logique de calcul est maintenant ici !
+
     public Map<String, Double> getAmountsByCategory() {
         return transactionRepository.findAll().stream()
                 .filter(t -> "EXPENSE".equals(t.getType()) && t.getCategory() != null)
