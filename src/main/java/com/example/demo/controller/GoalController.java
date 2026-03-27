@@ -19,7 +19,7 @@ public class GoalController {
 
     @GetMapping
     public List<Goal> getAllGoals() {
-        return new ArrayList<>(); // Crée cette méthode dans ton GoalService
+        return new ArrayList<>();
     }
 
     @GetMapping("/{id}/progress")

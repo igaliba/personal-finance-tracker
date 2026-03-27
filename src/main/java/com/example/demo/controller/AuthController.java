@@ -31,9 +31,7 @@ public class AuthController {
             User u = found.get();
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login Success");
-            // On génère un faux token pour le localStorage
             response.put("token", "fake-jwt-token-" + u.getId());
-            // On met les infos à la racine pour que Angular les trouve facilement
             response.put("id", u.getId());
             response.put("fullName", u.getFullName());
 

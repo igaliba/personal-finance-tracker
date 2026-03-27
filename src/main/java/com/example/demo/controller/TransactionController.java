@@ -32,7 +32,7 @@ public class TransactionController {
         return transactionService.getAmountsByCategory();
     }
 
-    // DASHBOARD : Total Revenus, Dépenses et Solde
+
     @GetMapping("/dashboard/summary")
     public Map<String, Object> getSummary() {
         return transactionService.getTransactionSummary();
